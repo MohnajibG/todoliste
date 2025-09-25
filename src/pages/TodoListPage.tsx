@@ -133,17 +133,16 @@ export default function TodoListPage() {
       <div className="min-h-screen flex flex-col items-center justify-start bg-gradient-to-b from-red-500 to-black p-6">
         <div className="w-full max-w-6xl space-y-6">
           <header className="flex items-center justify-between my-4 md:my-40">
-            <img
-              key={avatarUrl}
-              src={avatarUrl}
-              alt={firstName}
-              className="w-10 h-10 rounded-full"
-            />
+            <div className="flex items-center gap-4">
+              <img
+                key={avatarUrl}
+                src={avatarUrl}
+                alt={firstName}
+                className="w-10 h-10 rounded-full"
+              />
 
-            <h1 className="text-4xl font-bold text-white">
-              Bonjour <span className="text-amber-300">{firstName}</span>
-            </h1>
-
+              <h1 className="text-2xl font-bold text-white">{firstName}</h1>
+            </div>
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setDark(!dark)}
