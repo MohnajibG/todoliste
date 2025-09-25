@@ -26,7 +26,7 @@ export default function HomePage() {
       <div className="p-10 bg-white/50 shadow-lg text-center space-y-6 backdrop-blur-md rounded-xl">
         <h1 className="text-3xl font-bold text-red-600">Bienvenue sur To-Do</h1>
 
-        <h2 className="text-2xl text-amber-300/70 font-bold text-center shadow-2xl p-2 rounded-lg">
+        <h2 className="text-2xl font-bold text-center shadow-2xl p-2 rounded-lg">
           Se connecter
         </h2>
 

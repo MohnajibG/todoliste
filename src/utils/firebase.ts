@@ -10,25 +10,25 @@ import {
 } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDoXoklbXvw3Fr5EOD4NnO9vAhjtqsIgUg",
-  authDomain: "todo-db2d4.firebaseapp.com",
-  projectId: "todo-db2d4",
-  storageBucket: "todo-db2d4.firebasestorage.app",
-  messagingSenderId: "313631889743",
-  appId: "1:313631889743:web:883e3031d0b7a0090ecd3a",
-  measurementId: "G-5Q2HXWDW39",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialiser Firebase
+// Init Firebase
 const app = initializeApp(firebaseConfig);
 
 // Auth
 export const auth = getAuth(app);
 
-// Providers (clairement nommés)
+// Providers
 export const googleProvider = new GoogleAuthProvider();
 export const facebookProvider = new FacebookAuthProvider();
-export const githubProvider = new GithubAuthProvider(); // optionnel si tu veux GitHub
+export const githubProvider = new GithubAuthProvider();
 
 // Méthodes
 export { signInWithPopup, signOut };
