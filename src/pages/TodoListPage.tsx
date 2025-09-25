@@ -23,7 +23,12 @@ export default function TodoListPage() {
   const firstName = user?.displayName
     ? user.displayName.split(" ")[0]
     : "Utilisateur";
+  const avatarUrl = user?.photoURL
+    ? user.photoURL
+    : `https://ui-avatars.com/api/?name=${firstName}&background=ff0000&color=ffffff&size=128`;
 
+  console.log("user:", user);
+  console.log("avatarUrl:", avatarUrl);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [text, setText] = useState("");
   const [dark, setDark] = useState(() => {
@@ -128,6 +133,13 @@ export default function TodoListPage() {
       <div className="min-h-screen flex flex-col items-center justify-start bg-gradient-to-b from-red-500 to-black p-6">
         <div className="w-full max-w-6xl space-y-6">
           <header className="flex items-center justify-between my-4 md:my-40">
+            <img
+              key={avatarUrl}
+              src={avatarUrl}
+              alt={firstName}
+              className="w-10 h-10 rounded-full"
+            />
+
             <h1 className="text-4xl font-bold text-white">
               Bonjour <span className="text-amber-300">{firstName}</span>
             </h1>
