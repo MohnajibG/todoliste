@@ -13,6 +13,9 @@ import {
   orderBy,
   addDoc,
   serverTimestamp,
+  doc,
+  updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
 import { useAuth } from "../utils/useAuth";
@@ -46,9 +49,9 @@ export default function TodoListPage() {
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const tasks = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
+      const tasks = snapshot.docs.map((docSnap) => ({
+        id: docSnap.id,
+        ...docSnap.data(),
       })) as Todo[];
       setTodos(tasks);
     });
@@ -56,7 +59,7 @@ export default function TodoListPage() {
     return () => unsubscribe();
   }, [user]);
 
-  // Ajout d'une todo dans Firestore
+  // Ajouter une todo dans Firestore
   async function addTodoFirestore(text: string) {
     if (!user || !text.trim()) return;
     await addDoc(collection(db, "users", user.uid, "tasks"), {
@@ -68,29 +71,42 @@ export default function TodoListPage() {
     setText("");
   }
 
-  function removeTodo(id: string) {
-    setTodos((s) => s.filter((t) => t.id !== id));
+  // Supprimer une todo
+  async function removeTodo(id: string) {
+    if (!user) return;
+    await deleteDoc(doc(db, "users", user.uid, "tasks", id));
   }
 
-  function cycleStatus(id: string) {
-    setTodos((s) =>
-      s.map((t) => {
-        if (t.id !== id) return t;
-        const nextStatus =
-          t.status === "todo"
-            ? "doing"
-            : t.status === "doing"
-            ? "done"
-            : "todo";
-        return { ...t, status: nextStatus, done: nextStatus === "done" };
-      })
-    );
+  // Changer le statut cycliquement (todo -> doing -> done -> todo)
+  async function cycleStatus(id: string) {
+    const todo = todos.find((t) => t.id === id);
+    if (!todo || !user) return;
+
+    const nextStatus =
+      todo.status === "todo"
+        ? "doing"
+        : todo.status === "doing"
+        ? "done"
+        : "todo";
+
+    await updateDoc(doc(db, "users", user.uid, "tasks", id), {
+      status: nextStatus,
+      done: nextStatus === "done",
+      updatedAt: serverTimestamp(),
+    });
   }
 
-  function moveToColumn(todoId: string, newStatus: "todo" | "doing" | "done") {
-    setTodos((s) =>
-      s.map((t) => (t.id === todoId ? { ...t, status: newStatus } : t))
-    );
+  // Déplacer une tâche dans une colonne spécifique
+  async function moveToColumn(
+    todoId: string,
+    newStatus: "todo" | "doing" | "done"
+  ) {
+    if (!user) return;
+
+    await updateDoc(doc(db, "users", user.uid, "tasks", todoId), {
+      status: newStatus,
+      updatedAt: serverTimestamp(),
+    });
   }
 
   const columns = [
