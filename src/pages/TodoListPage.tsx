@@ -4,6 +4,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import TodoForm from "../components/TodoForm";
 import TodoColumn from "../components/TodoColumn";
 import type { Todo } from "../../types";
+import { FiSun, FiMoon, FiLogOut } from "react-icons/fi";
 
 import {
   collection,
@@ -126,27 +127,29 @@ export default function TodoListPage() {
     <DndProvider backend={HTML5Backend}>
       <div className="min-h-screen flex flex-col items-center justify-start bg-gradient-to-b from-red-500 to-black p-6">
         <div className="w-full max-w-6xl space-y-6">
-          <header className="flex items-center justify-between mb-4">
+          <header className="flex items-center justify-between my-40">
             <h1 className="text-4xl font-bold text-white">
               Bonjour <span className="text-amber-300">{firstName}</span>
             </h1>
+
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setDark(!dark)}
-                className="px-3 py-2 rounded-full border border-white/70 hover:bg-white/20 text-white transition-all duration-200 hover:scale-105"
+                className="p-2 rounded-full border border-white/70 hover:bg-white/20 text-white transition-all duration-200 hover:scale-105"
               >
-                {dark ? "☀️" : "🌙"}
+                {dark ? <FiSun size={20} /> : <FiMoon size={20} />}
               </button>
+
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+                className="p-2 rounded-full border border-red-600/70 hover:bg-red-600/20 bg-white text-red-600 transition-all duration-200 hover:scale-105"
               >
-                Déconnexion
+                <FiLogOut size={20} />
               </button>
             </div>
           </header>
 
-          <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 shadow-lg">
+          <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm  p-6 shadow-lg">
             <TodoForm
               text={text}
               setText={setText}

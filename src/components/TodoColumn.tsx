@@ -31,7 +31,7 @@ export default function TodoColumn({
   return (
     <div
       ref={drop as unknown as React.LegacyRef<HTMLDivElement>}
-      className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm p-6 shadow-lg rounded-xl min-h-[400px] transition-all hover:shadow-2xl"
+      className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm p-6 shadow-lg  min-h-auto  transition-all hover:shadow-2xl"
     >
       <h2 className={`font-semibold text-lg mb-4 ${color}`}>{title}</h2>
       {todos.length ? (
