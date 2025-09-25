@@ -4,30 +4,26 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import TodoForm from "../components/TodoForm";
 import TodoColumn from "../components/TodoColumn";
 import type { Todo } from "../../types";
-import { initialTodos } from "../components/Initialtodos";
 
-import { useAuth } from "../utils/useAuth"; // 👈 Hook auth
-import { auth, signOut } from "../utils/firebase"; // 👈 logout
+import {
+  collection,
+  query,
+  onSnapshot,
+  orderBy,
+  addDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 
-const LOCAL_KEY = "todo_v3";
+import { useAuth } from "../utils/useAuth";
+import { auth, signOut, db } from "../utils/firebase";
 
 export default function TodoListPage() {
-  const { user } = useAuth(); // 👈 récupérer l'utilisateur
+  const { user } = useAuth();
   const firstName = user?.displayName
     ? user.displayName.split(" ")[0]
     : "Utilisateur";
 
-  const [todos, setTodos] = useState<Todo[]>(() => {
-    const raw = localStorage.getItem(LOCAL_KEY);
-    if (!raw) return initialTodos;
-    try {
-      const parsed = JSON.parse(raw) as Todo[];
-      return parsed.length ? parsed : initialTodos;
-    } catch {
-      return initialTodos;
-    }
-  });
-
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [text, setText] = useState("");
   const [dark, setDark] = useState(() => {
     const saved = localStorage.getItem("theme");
@@ -37,22 +33,41 @@ export default function TodoListPage() {
     );
   });
 
+  // Gestion thème
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
     localStorage.setItem("theme", dark ? "dark" : "light");
   }, [dark]);
 
+  // Récupérer les todos depuis Firestore
   useEffect(() => {
-    localStorage.setItem(LOCAL_KEY, JSON.stringify(todos));
-  }, [todos]);
+    if (!user) return;
 
-  function addTodo() {
-    const trimmed = text.trim();
-    if (!trimmed) return;
-    setTodos((s) => [
-      { id: Date.now().toString(), text: trimmed, done: false, status: "todo" },
-      ...s,
-    ]);
+    const q = query(
+      collection(db, "users", user.uid, "tasks"),
+      orderBy("createdAt", "desc")
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const tasks = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Todo[];
+      setTodos(tasks);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
+  // Ajout d'une todo dans Firestore
+  async function addTodoFirestore(text: string) {
+    if (!user || !text.trim()) return;
+    await addDoc(collection(db, "users", user.uid, "tasks"), {
+      text: text.trim(),
+      status: "todo",
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
     setText("");
   }
 
@@ -81,6 +96,14 @@ export default function TodoListPage() {
     );
   }
 
+  async function handleLogout() {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.error("Erreur déconnexion:", err);
+    }
+  }
+
   const columns = [
     {
       status: "todo",
@@ -98,14 +121,6 @@ export default function TodoListPage() {
       color: "text-green-600 dark:text-green-400",
     },
   ] as const;
-
-  async function handleLogout() {
-    try {
-      await signOut(auth);
-    } catch (err) {
-      console.error("Erreur déconnexion:", err);
-    }
-  }
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -132,7 +147,11 @@ export default function TodoListPage() {
           </header>
 
           <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 shadow-lg">
-            <TodoForm text={text} setText={setText} addTodo={addTodo} />
+            <TodoForm
+              text={text}
+              setText={setText}
+              addTodo={() => addTodoFirestore(text)}
+            />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">

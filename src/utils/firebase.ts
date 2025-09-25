@@ -5,9 +5,11 @@ import {
   GoogleAuthProvider,
   FacebookAuthProvider,
   GithubAuthProvider,
+  OAuthProvider,
   signInWithPopup,
   signOut,
 } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -25,10 +27,14 @@ const app = initializeApp(firebaseConfig);
 // Auth
 export const auth = getAuth(app);
 
+export const db = getFirestore(app);
+
 // Providers
 export const googleProvider = new GoogleAuthProvider();
 export const facebookProvider = new FacebookAuthProvider();
 export const githubProvider = new GithubAuthProvider();
+export const appleProvider = new OAuthProvider("apple.com");
+export const microsoftProvider = new OAuthProvider("microsoft.com");
 
 // Méthodes
 export { signInWithPopup, signOut };

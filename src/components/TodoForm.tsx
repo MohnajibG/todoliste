@@ -1,20 +1,25 @@
+import { useState } from "react";
 import { FiPlus } from "react-icons/fi";
 
 interface Props {
   text: string;
   setText: (text: string) => void;
-  addTodo: () => void;
+  addTodo: () => Promise<void>;
 }
 
 export default function TodoForm({ text, setText, addTodo }: Props) {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!text.trim()) return;
+    setLoading(true);
+    await addTodo(); // ici addTodo peut être addTodoFirestore
+    setLoading(false);
+  };
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        addTodo();
-      }}
-      className="flex gap-3 mb-6"
-    >
+    <form onSubmit={handleSubmit} className="flex gap-3 mb-6">
       <input
         value={text}
         onChange={(e) => setText(e.target.value)}
@@ -23,7 +28,8 @@ export default function TodoForm({ text, setText, addTodo }: Props) {
       />
       <button
         type="submit"
-        className="flex items-center gap-2 px-6 py-3 bg-red-600 dark:bg-red-500 text-white rounded-3xl shadow hover:bg-red-700 dark:hover:bg-red-400 transition-all"
+        disabled={loading}
+        className="flex items-center gap-2 px-6 py-3 bg-red-600 dark:bg-red-500 text-white rounded-3xl shadow hover:bg-red-700 dark:hover:bg-red-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <FiPlus />
         Ajouter

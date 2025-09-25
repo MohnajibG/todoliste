@@ -3690,21 +3690,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^7.9.1":
-  version: 7.9.1
-  resolution: "react-router-dom@npm:7.9.1"
+"react-router-dom@npm:^7.9.2":
+  version: 7.9.2
+  resolution: "react-router-dom@npm:7.9.2"
   dependencies:
-    react-router: 7.9.1
+    react-router: 7.9.2
   peerDependencies:
     react: ">=18"
     react-dom: ">=18"
-  checksum: e8124511b15b8e4baa73c327973cf1512759614f952b499432fa134e23ec006aa588d14e3c0927f11ac87477361aa390ace589d96fa61ff7fda8804c617d229c
+  checksum: d40c7c7c474bd2ebf2e0dbd149676e3667332729788b28e29f31624df6d76a14e80438a9ee72ccce15246d902c30867c9cd0e2fec478ee406f64c8e69005b76f
   languageName: node
   linkType: hard
 
-"react-router@npm:7.9.1":
-  version: 7.9.1
-  resolution: "react-router@npm:7.9.1"
+"react-router@npm:7.9.2":
+  version: 7.9.2
+  resolution: "react-router@npm:7.9.2"
   dependencies:
     cookie: ^1.0.1
     set-cookie-parser: ^2.6.0
@@ -3714,7 +3714,7 @@ __metadata:
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 45e8948dcd8d6363e818513098e0d4b395a339cda22c3731bd25c56bd97d2bb0974516c7d18dc1f4da4284d4d1e4f46c2f382d8044b752ac4f9eee25b878fb59
+  checksum: 6548b670a67cdee016f7a72ac7b649699e53828a1ce3e0e05853430a5a302c4b9ffcc80240e0b05211e1e44a3b563d470f1df6aa5f2b2a1dabe1255b9cd338e1
   languageName: node
   linkType: hard
 
@@ -4091,7 +4091,7 @@ __metadata:
     react-dnd-html5-backend: ^16.0.1
     react-dom: ^19.1.1
     react-icons: ^5.5.0
-    react-router-dom: ^7.9.1
+    react-router-dom: ^7.9.2
     tailwindcss: ^4.1.13
     typescript: ~5.8.3
     typescript-eslint: ^8.44.0
