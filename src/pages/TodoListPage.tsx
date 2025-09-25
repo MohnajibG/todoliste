@@ -127,7 +127,7 @@ export default function TodoListPage() {
     <DndProvider backend={HTML5Backend}>
       <div className="min-h-screen flex flex-col items-center justify-start bg-gradient-to-b from-red-500 to-black p-6">
         <div className="w-full max-w-6xl space-y-6">
-          <header className="flex items-center justify-between my-40">
+          <header className="flex items-center justify-between my-4 md:my-40">
             <h1 className="text-4xl font-bold text-white">
               Bonjour <span className="text-amber-300">{firstName}</span>
             </h1>
