@@ -3,8 +3,8 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import TodoForm from "../components/TodoForm";
 import TodoColumn from "../components/TodoColumn";
+import Header from "../components/Header";
 import type { Todo } from "../../types";
-import { FiSun, FiMoon, FiLogOut } from "react-icons/fi";
 
 import {
   collection,
@@ -16,19 +16,10 @@ import {
 } from "firebase/firestore";
 
 import { useAuth } from "../utils/useAuth";
-import { auth, signOut, db } from "../utils/firebase";
+import { db } from "../utils/firebase";
 
 export default function TodoListPage() {
   const { user } = useAuth();
-  const firstName = user?.displayName
-    ? user.displayName.split(" ")[0]
-    : "Utilisateur";
-  const avatarUrl = user?.photoURL
-    ? user.photoURL
-    : `https://ui-avatars.com/api/?name=${firstName}&background=ff0000&color=ffffff&size=128`;
-
-  console.log("user:", user);
-  console.log("avatarUrl:", avatarUrl);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [text, setText] = useState("");
   const [dark, setDark] = useState(() => {
@@ -102,14 +93,6 @@ export default function TodoListPage() {
     );
   }
 
-  async function handleLogout() {
-    try {
-      await signOut(auth);
-    } catch (err) {
-      console.error("Erreur déconnexion:", err);
-    }
-  }
-
   const columns = [
     {
       status: "todo",
@@ -132,33 +115,7 @@ export default function TodoListPage() {
     <DndProvider backend={HTML5Backend}>
       <div className="min-h-screen flex flex-col items-center justify-start bg-gradient-to-b from-red-500 to-black p-6">
         <div className="w-full max-w-6xl space-y-6">
-          <header className="flex items-center justify-between my-4 md:my-40">
-            <div className="flex items-center gap-4">
-              <img
-                key={avatarUrl}
-                src={avatarUrl}
-                alt={firstName}
-                className="w-10 h-10 rounded-full"
-              />
-
-              <h1 className="text-2xl font-bold text-white">{firstName}</h1>
-            </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setDark(!dark)}
-                className="p-2 rounded-full border border-white/70 hover:bg-white/20 text-white transition-all duration-200 hover:scale-105"
-              >
-                {dark ? <FiSun size={20} /> : <FiMoon size={20} />}
-              </button>
-
-              <button
-                onClick={handleLogout}
-                className="p-2 rounded-full border border-red-600/70 hover:bg-red-600/20 bg-white text-red-600 transition-all duration-200 hover:scale-105"
-              >
-                <FiLogOut size={20} />
-              </button>
-            </div>
-          </header>
+          <Header dark={dark} setDark={setDark} />
 
           <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm  p-6 shadow-lg">
             <TodoForm
