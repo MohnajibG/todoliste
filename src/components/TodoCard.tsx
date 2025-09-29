@@ -1,14 +1,13 @@
 import { useDrag } from "react-dnd";
 import { FiCheck, FiTrash2 } from "react-icons/fi";
-import type { Todo } from "../../types";
+import type { TodoCardProps } from "../../types";
 
-interface Props {
-  todo: Todo;
-  removeTodo: (id: string) => void;
-  cycleStatus: (id: string) => void;
-}
-
-export default function TodoCard({ todo, removeTodo, cycleStatus }: Props) {
+export default function TodoCard({
+  todo,
+  removeTodo,
+  cycleStatus,
+  updatePriority, // ✅ ajouté
+}: TodoCardProps) {
   const [{ isDragging }, drag] = useDrag({
     type: "TODO",
     item: { id: todo.id },
@@ -33,6 +32,23 @@ export default function TodoCard({ todo, removeTodo, cycleStatus }: Props) {
       >
         {todo.text}
       </span>
+
+      {/* ✅ Gestion de la priorité */}
+      <div className="flex items-center gap-1 mr-3">
+        {[1, 2, 3].map((level) => (
+          <span
+            key={level}
+            onClick={() => updatePriority(todo.id, level)}
+            className={`cursor-pointer text-lg ${
+              todo.priority >= level
+                ? "text-yellow-400"
+                : "text-gray-300 dark:text-gray-600"
+            }`}
+          >
+            ★
+          </span>
+        ))}
+      </div>
 
       <div className="flex items-center gap-2">
         {todo.done && <FiCheck className="text-green-500" />}

@@ -53,6 +53,10 @@ export default function TodoListPage() {
         id: docSnap.id,
         ...docSnap.data(),
       })) as Todo[];
+      tasks.sort((a, b) => {
+        if (b.priority !== a.priority) return b.priority - a.priority;
+        return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
+      });
       setTodos(tasks);
     });
 
@@ -65,6 +69,7 @@ export default function TodoListPage() {
     await addDoc(collection(db, "users", user.uid, "tasks"), {
       text: text.trim(),
       status: "todo",
+      priority: 0,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
@@ -72,11 +77,18 @@ export default function TodoListPage() {
   }
 
   // Supprimer une todo
-  async function removeTodo(id: string) {
+  const removeTodo = async (id: string) => {
     if (!user) return;
     await deleteDoc(doc(db, "users", user.uid, "tasks", id));
-  }
+  };
 
+  const updatePriority = async (id: string, priority: number) => {
+    if (!user) return;
+    await updateDoc(doc(db, "users", user.uid, "tasks", id), {
+      priority: priority,
+      updatedAt: serverTimestamp(),
+    });
+  };
   // Changer le statut cycliquement (todo -> doing -> done -> todo)
   async function cycleStatus(id: string) {
     const todo = todos.find((t) => t.id === id);
@@ -114,17 +126,19 @@ export default function TodoListPage() {
       status: "todo",
       title: "TODO",
       color:
-        "text-red-600 dark:text-red-400 text-lg text-center font-bold border-b-2 border-red-600 dark:border-red-400 pb-1",
+        "text-red-600 dark:text-red-400 text-lg text-center font-bold border-b-2 border-red-600 dark:border-red-400 pb-5",
     },
     {
       status: "doing",
       title: "DOING",
-      color: "text-red-700 dark:text-red-500 text-lg text-center font-bold",
+      color:
+        "text-red-700 dark:text-red-500 text-lg text-center font-bold text-center font-bold border-b-2 border-red-700 dark:border-red-500 pb-5",
     },
     {
       status: "done",
       title: "DONE",
-      color: "text-red-900 dark:text-red-600 text-lg text-center font-bold",
+      color:
+        "text-red-900 dark:text-red-600 text-lg text-center font-bold font-bold border-b-2 border-red-700 dark:border-red-500 pb-5",
     },
   ] as const;
 
@@ -152,6 +166,7 @@ export default function TodoListPage() {
                   title={col.title}
                   color={col.color}
                   todos={colTodos}
+                  updatePriority={updatePriority}
                   moveToColumn={moveToColumn}
                   removeTodo={removeTodo}
                   cycleStatus={cycleStatus}

@@ -1,13 +1,9 @@
 import { useState } from "react";
 import { FiPlus } from "react-icons/fi";
 
-interface Props {
-  text: string;
-  setText: (text: string) => void;
-  addTodo: () => Promise<void>;
-}
+import type { TodoFormProps } from "../../types";
 
-export default function TodoForm({ text, setText, addTodo }: Props) {
+export default function TodoForm({ text, setText, addTodo }: TodoFormProps) {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {

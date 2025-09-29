@@ -1,16 +1,6 @@
 import { useDrop } from "react-dnd";
 import TodoCard from "./TodoCard";
-import type { Todo } from "../../types";
-
-interface Props {
-  status: "todo" | "doing" | "done";
-  title: string;
-  color: string;
-  todos: Todo[];
-  moveToColumn: (todoId: string, newStatus: "todo" | "doing" | "done") => void;
-  removeTodo: (id: string) => void;
-  cycleStatus: (id: string) => void;
-}
+import type { TodoColumnProps } from "../../types";
 
 export default function TodoColumn({
   status,
@@ -20,7 +10,8 @@ export default function TodoColumn({
   moveToColumn,
   removeTodo,
   cycleStatus,
-}: Props) {
+  updatePriority,
+}: TodoColumnProps) {
   const [, drop] = useDrop({
     accept: "TODO",
     drop: (item: { id: string }) => {
@@ -31,7 +22,7 @@ export default function TodoColumn({
   return (
     <div
       ref={drop as unknown as React.LegacyRef<HTMLDivElement>}
-      className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm p-6 shadow-lg  min-h-auto  transition-all hover:shadow-2xl"
+      className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm p-6 shadow-lg min-h-auto transition-all hover:shadow-2xl"
     >
       <h2 className={`font-semibold text-lg mb-4 ${color}`}>{title}</h2>
       {todos.length ? (
@@ -41,6 +32,7 @@ export default function TodoColumn({
             todo={todo}
             removeTodo={removeTodo}
             cycleStatus={cycleStatus}
+            updatePriority={updatePriority} // ✅ passe la prop
           />
         ))
       ) : (
