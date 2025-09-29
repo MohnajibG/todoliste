@@ -63,19 +63,6 @@ export default function TodoListPage() {
     return () => unsubscribe();
   }, [user]);
 
-  // Ajouter une todo dans Firestore
-  async function addTodoFirestore(text: string) {
-    if (!user || !text.trim()) return;
-    await addDoc(collection(db, "users", user.uid, "tasks"), {
-      text: text.trim(),
-      status: "todo",
-      priority: 0,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    });
-    setText("");
-  }
-
   // Supprimer une todo
   const removeTodo = async (id: string) => {
     if (!user) return;
@@ -108,6 +95,21 @@ export default function TodoListPage() {
     });
   }
 
+  const addTodoFirestore = async (newTodo: {
+    text: string;
+    category: { name: string; color: string };
+  }) => {
+    if (!user || !newTodo.text.trim()) return;
+
+    await addDoc(collection(db, "users", user.uid, "tasks"), {
+      text: newTodo.text.trim(),
+      status: "todo",
+      priority: 0,
+      category: newTodo.category,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+  };
   // Déplacer une tâche dans une colonne spécifique
   async function moveToColumn(
     todoId: string,
@@ -152,7 +154,7 @@ export default function TodoListPage() {
             <TodoForm
               text={text}
               setText={setText}
-              addTodo={() => addTodoFirestore(text)}
+              addTodo={addTodoFirestore}
             />
           </div>
 

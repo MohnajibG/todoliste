@@ -1,13 +1,17 @@
-import { Timestamp } from "firebase/firestore";
+import type { Timestamp } from "firebase/firestore";
 
-// 🔹 Représente une tâche seule (juste les données)
+// 🔹 Une tâche
 export interface Todo {
   id: string;
   text: string;
   createdAt: Timestamp;
   status: "todo" | "doing" | "done";
-  priority: number; // 0 à 3 étoiles
-  done?: boolean; // optionnel si tu veux gérer le check
+  priority: number;
+  done?: boolean;
+  category?: {
+    name: string;
+    color: string;
+  };
 }
 
 // 🔹 Props du composant TodoColumn
@@ -29,7 +33,10 @@ export interface TodoColumnProps {
 export interface TodoFormProps {
   text: string;
   setText: (text: string) => void;
-  addTodo: () => Promise<void>;
+  addTodo: (newTodo: {
+    text: string;
+    category: { name: string; color: string };
+  }) => Promise<void>;
 }
 
 // 🔹 Props du composant TodoCard

@@ -20,6 +20,14 @@ export default function TodoCard({
       style={{ opacity: isDragging ? 0.5 : 1 }}
       className="flex items-center justify-between p-3 bg-white/60 dark:bg-gray-800 shadow-md rounded-xl mb-2 cursor-move"
     >
+      {/* ✅ Pastille catégorie */}
+      <div
+        className="w-4 h-4 rounded-full mr-3"
+        style={{ backgroundColor: todo.category?.color || "transparent" }}
+        title={todo.category?.name || "Sans catégorie"}
+      ></div>
+
+      {/* ✅ Texte cliquable (cycle status) */}
       <span
         onClick={() => cycleStatus(todo.id)}
         className={`flex-1 cursor-pointer select-none ${
@@ -50,6 +58,7 @@ export default function TodoCard({
         ))}
       </div>
 
+      {/* ✅ Boutons action */}
       <div className="flex items-center gap-2">
         {todo.done && <FiCheck className="text-green-500" />}
         <FiTrash2
