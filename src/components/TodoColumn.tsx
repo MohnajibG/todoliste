@@ -82,7 +82,7 @@ export default function TodoColumn({
               checked={sortMode === "time"}
               onChange={() => setSortMode("time")}
             />{" "}
-            Chronological
+            Created
           </label>
           <label>
             <input
