@@ -112,18 +112,19 @@ export default function TodoListPage() {
   const columns = [
     {
       status: "todo",
-      title: "À faire",
-      color: "text-blue-600 dark:text-blue-400",
+      title: "TODO",
+      color:
+        "text-red-600 dark:text-red-400 text-lg text-center font-bold border-b-2 border-red-600 dark:border-red-400 pb-1",
     },
     {
       status: "doing",
-      title: "En cours",
-      color: "text-orange-600 dark:text-orange-400",
+      title: "DOING",
+      color: "text-red-700 dark:text-red-500 text-lg text-center font-bold",
     },
     {
       status: "done",
-      title: "Terminé",
-      color: "text-green-600 dark:text-green-400",
+      title: "DONE",
+      color: "text-red-900 dark:text-red-600 text-lg text-center font-bold",
     },
   ] as const;
 
