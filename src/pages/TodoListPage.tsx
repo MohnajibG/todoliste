@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+
 import TodoForm from "../components/TodoForm";
 import TodoColumn from "../components/TodoColumn";
 import Header from "../components/Header";
@@ -33,13 +34,13 @@ export default function TodoListPage() {
     );
   });
 
-  // Gestion thème
+  // 🔹 Gestion thème
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
     localStorage.setItem("theme", dark ? "dark" : "light");
   }, [dark]);
 
-  // Récupérer les todos depuis Firestore
+  // 🔹 Récupérer les todos depuis Firestore
   useEffect(() => {
     if (!user) return;
 
@@ -53,31 +54,35 @@ export default function TodoListPage() {
         id: docSnap.id,
         ...docSnap.data(),
       })) as Todo[];
+
       tasks.sort((a, b) => {
         if (b.priority !== a.priority) return b.priority - a.priority;
         return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
       });
+
       setTodos(tasks);
     });
 
     return () => unsubscribe();
   }, [user]);
 
-  // Supprimer une todo
+  // 🔹 Supprimer une todo
   const removeTodo = async (id: string) => {
     if (!user) return;
     await deleteDoc(doc(db, "users", user.uid, "tasks", id));
   };
 
+  // 🔹 Mettre à jour la priorité
   const updatePriority = async (id: string, priority: number) => {
     if (!user) return;
     await updateDoc(doc(db, "users", user.uid, "tasks", id), {
-      priority: priority,
+      priority,
       updatedAt: serverTimestamp(),
     });
   };
-  // Changer le statut cycliquement (todo -> doing -> done -> todo)
-  async function cycleStatus(id: string) {
+
+  // 🔹 Changer le statut cycliquement
+  const cycleStatus = async (id: string) => {
     const todo = todos.find((t) => t.id === id);
     if (!todo || !user) return;
 
@@ -93,8 +98,9 @@ export default function TodoListPage() {
       done: nextStatus === "done",
       updatedAt: serverTimestamp(),
     });
-  }
+  };
 
+  // 🔹 Ajouter une todo dans Firestore
   const addTodoFirestore = async (newTodo: {
     text: string;
     category: { name: string; color: string };
@@ -110,18 +116,19 @@ export default function TodoListPage() {
       updatedAt: serverTimestamp(),
     });
   };
-  // Déplacer une tâche dans une colonne spécifique
-  async function moveToColumn(
+
+  // 🔹 Déplacer une tâche dans une colonne
+  const moveToColumn = async (
     todoId: string,
     newStatus: "todo" | "doing" | "done"
-  ) {
+  ) => {
     if (!user) return;
 
     await updateDoc(doc(db, "users", user.uid, "tasks", todoId), {
       status: newStatus,
       updatedAt: serverTimestamp(),
     });
-  }
+  };
 
   const columns = [
     {
@@ -134,13 +141,13 @@ export default function TodoListPage() {
       status: "doing",
       title: "DOING",
       color:
-        "text-red-700 dark:text-red-500 text-lg text-center font-bold text-center font-bold border-b-2 border-red-700 dark:border-red-500 pb-5",
+        "text-red-700 dark:text-red-500 text-lg text-center font-bold border-b-2 border-red-700 dark:border-red-500 pb-5",
     },
     {
       status: "done",
       title: "DONE",
       color:
-        "text-red-900 dark:text-red-600 text-lg text-center font-bold font-bold border-b-2 border-red-700 dark:border-red-500 pb-5",
+        "text-red-900 dark:text-red-600 text-lg text-center font-bold border-b-2 border-red-700 dark:border-red-500 pb-5",
     },
   ] as const;
 
@@ -150,7 +157,7 @@ export default function TodoListPage() {
         <div className="w-full max-w-6xl space-y-6">
           <Header dark={dark} setDark={setDark} />
 
-          <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm  p-6 shadow-lg">
+          <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm p-6 shadow-lg">
             <TodoForm
               text={text}
               setText={setText}

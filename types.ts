@@ -46,3 +46,11 @@ export interface TodoCardProps {
   cycleStatus: (id: string) => Promise<void>;
   updatePriority: (id: string, priority: number) => Promise<void>;
 }
+
+// 🔹 Props du composant CategorySelector
+export interface CategorySelectorProps {
+  categoryName: string;
+  setCategoryName: (name: string) => void;
+  categoryColor: string;
+  setCategoryColor: (color: string) => void;
+}
