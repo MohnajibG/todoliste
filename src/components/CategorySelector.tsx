@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
+import { IoClose } from "react-icons/io5";
 import type { CategorySelectorProps } from "../../types";
 
 const defaultColors = [
@@ -26,16 +27,49 @@ export default function CategorySelector({
   const [open, setOpen] = useState(false);
   const [customColor, setCustomColor] = useState("#EF4444");
 
+  // Liste des catégories enregistrées
+  const [savedCategories, setSavedCategories] = useState<
+    { name: string; color: string }[]
+  >([]);
+
+  // Sauvegarder une catégorie
+  function saveCategory() {
+    if (!categoryName.trim()) return;
+    const exists = savedCategories.find(
+      (c) => c.name.toLowerCase() === categoryName.toLowerCase()
+    );
+    if (!exists) {
+      setSavedCategories([
+        ...savedCategories,
+        { name: categoryName.trim(), color: categoryColor },
+      ]);
+    }
+  }
+
+  // Supprimer une catégorie
+  function deleteCategory(name: string) {
+    setSavedCategories(savedCategories.filter((c) => c.name !== name));
+  }
+
   return (
     <div className="flex flex-col gap-2 relative w-full sm:w-64">
       {/* Nom de la catégorie */}
-      <input
-        type="text"
-        value={categoryName}
-        onChange={(e) => setCategoryName(e.target.value)}
-        placeholder="Nom de la catégorie"
-        className="px-3 py-2 rounded border focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white w-full"
-      />
+      <div className="flex gap-2">
+        <input
+          type="text"
+          value={categoryName}
+          onChange={(e) => setCategoryName(e.target.value)}
+          placeholder="Nom de la catégorie"
+          className="flex-1 px-3 py-2 rounded border focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
+        />
+        <button
+          type="button"
+          onClick={saveCategory}
+          className="px-3 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+        >
+          +
+        </button>
+      </div>
 
       {/* Menu burger pour choisir la couleur */}
       <button
@@ -95,20 +129,43 @@ export default function CategorySelector({
         )}
       </AnimatePresence>
 
-      {/* Affichage pastille choisie */}
-      {categoryName && categoryColor && (
-        <motion.div
-          className="flex items-center gap-2 mt-1"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <span
-            className="w-4 h-4 rounded-full border"
-            style={{ backgroundColor: categoryColor }}
-          ></span>
-          <span className="text-sm">{categoryName}</span>
-        </motion.div>
+      {/* Liste des catégories enregistrées */}
+      {savedCategories.length > 0 && (
+        <div className="mt-2 border rounded p-2 bg-gray-50 dark:bg-gray-800">
+          <p className="text-sm font-semibold mb-1">
+            Catégories enregistrées :
+          </p>
+          <ul className="flex flex-col gap-1">
+            {savedCategories.map((cat) => (
+              <li
+                key={cat.name}
+                className="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCategoryName(cat.name);
+                    setCategoryColor(cat.color);
+                  }}
+                  className="flex items-center gap-2"
+                >
+                  <span
+                    className="w-4 h-4 rounded-full border"
+                    style={{ backgroundColor: cat.color }}
+                  ></span>
+                  <span className="text-sm">{cat.name}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => deleteCategory(cat.name)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  <IoClose size={16} />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   );
