@@ -1,18 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // src/pages/HomePage.tsx
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import {
-  auth,
-  signInWithPopup,
-  googleProvider,
-  // facebookProvider,
-  // githubProvider,
-  // appleProvider,
-  // microsoftProvider,
-} from "../utils/firebase";
+import { auth, signInWithPopup, googleProvider } from "../utils/firebase";
 
-// Icônes modernes avec react-icons
+// Modern icons with react-icons
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook, FaGithub, FaApple, FaMicrosoft } from "react-icons/fa";
 import Footer from "../components/Footer";
@@ -20,17 +13,37 @@ import Footer from "../components/Footer";
 export default function HomePage() {
   const navigate = useNavigate();
 
-  // Fonction de connexion
+  // 🔹 Check if user is already logged in
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      navigate("/todos");
+    }
+  }, [navigate]);
+
+  // 🔹 Login function
   const handleLogin = async (provider: any) => {
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      // Store user in localStorage to persist login
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+        })
+      );
+
       navigate("/todos");
     } catch (err) {
-      console.error("Erreur connexion:", err);
+      console.error("Login error:", err);
     }
   };
 
-  // Variants Framer Motion
+  // Framer Motion variants for buttons
   const buttonVariants = {
     initial: { scale: 1, opacity: 0, y: 30 },
     animate: { scale: 1, opacity: 1, y: 0 },
@@ -39,7 +52,7 @@ export default function HomePage() {
   };
 
   return (
-    <main className="flex flex-col ">
+    <main className="flex flex-col">
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-black to-red-900 p-6">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -48,15 +61,15 @@ export default function HomePage() {
           className="p-12 bg-white/10 shadow-2xl text-center space-y-8 backdrop-blur-lg border border-white/20 w-full max-w-lg"
         >
           <h1 className="text-4xl font-extrabold text-white tracking-tight">
-            Bienvenue sur <span className="text-red-500">To-Do</span>
+            Welcome to <span className="text-red-500">To-Do</span>
           </h1>
 
           <h2 className="text-xl font-semibold text-gray-200 uppercase tracking-wide">
-            Connectez-vous
+            Sign in
           </h2>
 
           <div className="grid grid-cols-3 gap-6 justify-items-center">
-            {/* Google (actif) */}
+            {/* Google (active) */}
             <motion.button
               variants={buttonVariants}
               initial="initial"
@@ -69,7 +82,7 @@ export default function HomePage() {
               <FcGoogle size={36} />
             </motion.button>
 
-            {/* Facebook (désactivé) */}
+            {/* Facebook (disabled) */}
             <motion.button
               variants={buttonVariants}
               initial="initial"
@@ -80,7 +93,7 @@ export default function HomePage() {
               <FaFacebook size={32} />
             </motion.button>
 
-            {/* GitHub (désactivé) */}
+            {/* GitHub (disabled) */}
             <motion.button
               variants={buttonVariants}
               initial="initial"
@@ -91,7 +104,7 @@ export default function HomePage() {
               <FaGithub size={32} />
             </motion.button>
 
-            {/* Apple (désactivé) */}
+            {/* Apple (disabled) */}
             <motion.button
               variants={buttonVariants}
               initial="initial"
@@ -102,7 +115,7 @@ export default function HomePage() {
               <FaApple size={32} />
             </motion.button>
 
-            {/* Microsoft (désactivé) */}
+            {/* Microsoft (disabled) */}
             <motion.button
               variants={buttonVariants}
               initial="initial"

@@ -27,15 +27,22 @@ export default function TodoColumn({
 
   // ✅ sorting logic
   const sortedTodos = useMemo(() => {
-    const sorted = [...todos];
+    const sorted = [...todos].map((todo) => ({
+      ...todo,
+      // Convert Firebase Timestamp to JS Date if exists, else use new Date(0)
+      createdAtDate: todo.createdAt ? todo.createdAt.toDate() : new Date(0),
+    }));
 
     if (sortMode === "priority") {
       sorted.sort(
         (a, b) =>
-          b.priority - a.priority || a.createdAt.seconds - b.createdAt.seconds
+          b.priority - a.priority ||
+          a.createdAtDate.getTime() - b.createdAtDate.getTime()
       );
     } else if (sortMode === "time") {
-      sorted.sort((a, b) => a.createdAt.seconds - b.createdAt.seconds);
+      sorted.sort(
+        (a, b) => a.createdAtDate.getTime() - b.createdAtDate.getTime()
+      );
     } else if (sortMode === "category") {
       sorted.sort((a, b) =>
         (a.category?.name || "").localeCompare(b.category?.name || "")
