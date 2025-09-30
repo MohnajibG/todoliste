@@ -65,26 +65,26 @@ export default function TodoColumn({
         <h2 className={`font-semibold text-lg ${color}`}>{title}</h2>
 
         {/* ✅ Sorting filters */}
-        <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300 pl-2">
-          <label>
+        <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300 pl-2 ">
+          <label className="flex items-center justify-around gap-1">
             <input
               type="radio"
               name={`sort-${status}`}
               checked={sortMode === "priority"}
               onChange={() => setSortMode("priority")}
-            />{" "}
+            />
             Priority
           </label>
-          <label>
+          <label className="flex items-center justify-around gap-1">
             <input
               type="radio"
               name={`sort-${status}`}
               checked={sortMode === "time"}
               onChange={() => setSortMode("time")}
-            />{" "}
+            />
             Created
           </label>
-          <label>
+          <label className="flex items-center justify-around gap-1">
             <input
               type="radio"
               name={`sort-${status}`}
