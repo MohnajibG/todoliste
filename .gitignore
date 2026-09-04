@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Clé de compte de service Firebase (agent scraper) - ne jamais commiter
+scraper/.env
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

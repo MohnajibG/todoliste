@@ -1,0 +1,22 @@
+{
+  "name": "apartment-agent-scraper",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Agent externe: surveille des flux d'annonces immobilières et pousse des notifications dans Firestore pour l'app todoliste.",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "build": "tsc -b",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "firebase-admin": "^12.7.0",
+    "rss-parser": "^3.13.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "~5.8.3",
+    "@types/node": "^22.10.2"
+  }
+}

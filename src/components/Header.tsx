@@ -1,5 +1,8 @@
-import { FiSun, FiMoon, FiLogOut } from "react-icons/fi";
-import { auth, signOut } from "../utils/firebase";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { FiSun, FiMoon, FiLogOut, FiBell, FiCheckSquare } from "react-icons/fi";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { auth, signOut, db } from "../utils/firebase";
 import { useAuth } from "../utils/useAuth";
 
 interface HeaderProps {
@@ -9,9 +12,27 @@ interface HeaderProps {
 
 export default function Header({ dark, setDark }: HeaderProps) {
   const { user } = useAuth();
+  const location = useLocation();
+  const [unreadCount, setUnreadCount] = useState(0);
   const firstName = user?.displayName
     ? user.displayName.split(" ")[0]
     : "Utilisateur";
+
+  // 🔹 Compte les notifications d'appartement non lues (visible sur tout l'app)
+  useEffect(() => {
+    if (!user) return;
+
+    const q = query(
+      collection(db, "users", user.uid, "apartmentNotifications"),
+      where("read", "==", false)
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      setUnreadCount(snapshot.size);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
 
   const avatarUrl = user?.photoURL
     ? user.photoURL
@@ -48,6 +69,35 @@ export default function Header({ dark, setDark }: HeaderProps) {
           <h1 className="text-2xl font-bold text-white">{firstName}</h1>
         </div>
         <div className="flex items-center gap-3">
+          <Link
+            to="/todos"
+            title="Mes tâches"
+            className={`p-2 rounded-full border transition-all duration-200 hover:scale-105 ${
+              location.pathname === "/todos"
+                ? "bg-white text-red-600 border-white"
+                : "border-white/70 text-white hover:bg-white/20"
+            }`}
+          >
+            <FiCheckSquare size={20} />
+          </Link>
+
+          <Link
+            to="/agent"
+            title="Agent appartement"
+            className={`relative p-2 rounded-full border transition-all duration-200 hover:scale-105 ${
+              location.pathname === "/agent"
+                ? "bg-white text-red-600 border-white"
+                : "border-white/70 text-white hover:bg-white/20"
+            }`}
+          >
+            <FiBell size={20} />
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 text-xs font-bold bg-red-600 text-white rounded-full">
+                {unreadCount}
+              </span>
+            )}
+          </Link>
+
           <button
             onClick={() => setDark(!dark)}
             className="p-2 rounded-full border border-white/70 hover:bg-white/20 text-white transition-all duration-200 hover:scale-105"

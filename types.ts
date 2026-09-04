@@ -54,3 +54,74 @@ export interface CategorySelectorProps {
   categoryColor: string;
   setCategoryColor: (color: string) => void;
 }
+
+// 🔹 Agent de recherche d'appartement
+export type PropertyType = "appartement" | "maison" | "tous";
+
+// Un critère de recherche enregistré par l'utilisateur
+export interface ApartmentCriteria {
+  id: string;
+  name: string;
+  city: string;
+  minPrice?: number;
+  maxPrice: number;
+  minRooms?: number;
+  minSurface?: number;
+  propertyType: PropertyType;
+  // Optionnel: flux RSS d'un site/portail/alerte à surveiller pour ce critère
+  feedUrl?: string;
+  active: boolean;
+  createdAt: Timestamp;
+}
+
+// Une annonce trouvée par une source (RSS, scraper HTML, saisie manuelle...)
+export interface ApartmentListing {
+  id: string;
+  source: string;
+  title: string;
+  price: number;
+  city: string;
+  rooms?: number;
+  surface?: number;
+  url: string;
+  imageUrl?: string;
+  publishedAt?: string;
+}
+
+// Une notification in-app générée quand une annonce correspond à un critère
+export interface ApartmentNotification {
+  id: string;
+  criteriaId: string;
+  criteriaName: string;
+  listing: ApartmentListing;
+  read: boolean;
+  createdAt: Timestamp;
+}
+
+// 🔹 Props du composant CriteriaForm
+export interface CriteriaFormProps {
+  addCriteria: (criteria: {
+    name: string;
+    city: string;
+    minPrice?: number;
+    maxPrice: number;
+    minRooms?: number;
+    minSurface?: number;
+    propertyType: PropertyType;
+    feedUrl?: string;
+  }) => Promise<void>;
+}
+
+// 🔹 Props du composant CriteriaList
+export interface CriteriaListProps {
+  criteria: ApartmentCriteria[];
+  toggleActive: (id: string, active: boolean) => Promise<void>;
+  removeCriteria: (id: string) => Promise<void>;
+}
+
+// 🔹 Props du composant NotificationsList
+export interface NotificationsListProps {
+  notifications: ApartmentNotification[];
+  markAsRead: (id: string) => Promise<void>;
+  removeNotification: (id: string) => Promise<void>;
+}

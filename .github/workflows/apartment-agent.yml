@@ -1,0 +1,36 @@
+name: Agent appartement
+
+on:
+  schedule:
+    # Toutes les 30 minutes. Ajustez selon vos besoins/limites des sources.
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  run-agent:
+    runs-on: ubuntu-latest
+    # Nécessite le secret FIREBASE_SERVICE_ACCOUNT_KEY (Settings > Secrets
+    # and variables > Actions) contenant le JSON de la clé de compte de
+    # service Firebase. Sans ce secret, le job échoue explicitement au
+    # lieu de tourner silencieusement dans le vide.
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Installer les dépendances du scraper
+        working-directory: scraper
+        run: npm install
+
+      - name: Exécuter l'agent
+        working-directory: scraper
+        env:
+          FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+        run: |
+          if [ -z "$FIREBASE_SERVICE_ACCOUNT_KEY" ]; then
+            echo "::error::Secret FIREBASE_SERVICE_ACCOUNT_KEY manquant. Voir scraper/README.md."
+            exit 1
+          fi
+          npm start

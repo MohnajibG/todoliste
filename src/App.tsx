@@ -2,6 +2,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./utils/useAuth";
 import TodoListPage from "./pages/TodoListPage";
+import AgentPage from "./pages/AgentPage";
 import type { JSX } from "react";
 import HomePage from "./pages/Home";
 
@@ -19,6 +20,14 @@ export default function App() {
         element={
           <PrivateRoute>
             <TodoListPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/agent"
+        element={
+          <PrivateRoute>
+            <AgentPage />
           </PrivateRoute>
         }
       />

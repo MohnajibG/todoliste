@@ -2,6 +2,25 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
+## Agent appartement
+
+En plus de la todo-list, l'app propose une page **Agent** (`/agent`) pour
+créer des alertes de recherche d'appartement (ville, budget, pièces,
+surface) et recevoir une notification in-app dès qu'une annonce
+correspondante est trouvée.
+
+- Les critères et les notifications sont stockés dans Firestore
+  (`users/{uid}/apartmentCriteria` et `users/{uid}/apartmentNotifications`).
+- Un badge sur l'icône 🔔 du header indique le nombre de notifications non
+  lues, visible depuis toute l'app.
+- La recherche des annonces elle-même est déléguée à un agent externe
+  (dossier [`scraper/`](./scraper/README.md)), qui tourne en dehors du
+  front (planifiable via [`.github/workflows/apartment-agent.yml`](./.github/workflows/apartment-agent.yml)).
+  Voir `scraper/README.md` pour la configuration des sources (RSS
+  fonctionnel par défaut, adaptateur HTML pour un site sans protection
+  anti-bot) et les limites volontaires vis-à-vis des sites protégés
+  (leboncoin, SeLoger...).
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
