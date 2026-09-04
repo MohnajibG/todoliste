@@ -25,14 +25,22 @@ export const rssSource: ListingSource = {
     return feed.items
       .filter((item) => item.link)
       .map((item) => {
-        const text = `${item.title ?? ""} ${item.contentSnippet ?? item.content ?? ""}`;
+        const title = item.title ?? "";
+        const text = `${title} ${item.contentSnippet ?? item.content ?? ""}`;
 
         return {
           id: hashId(item.link!),
           source: "rss",
           title: item.title ?? "Annonce sans titre",
           price: extractPrice(text) ?? Number.POSITIVE_INFINITY,
-          city: extractCity(text) ?? criteria.city,
+          // Ne PAS retomber sur criteria.city ici: on ne sait pas quelle est
+          // la vraie ville de l'annonce, donc on laisse vide plutôt que
+          // d'afficher/valider une ville non confirmée. matchesCriteria
+          // laisse passer une ville vide (impossible à vérifier) plutôt que
+          // de rejeter à tort une annonce dont on n'a pas su extraire la ville.
+          // Extraction sur le titre seul (pas la description) pour éviter
+          // d'avaler la phrase suivante dans le résumé.
+          city: extractCity(title) ?? "",
           rooms: extractRooms(text),
           surface: extractSurface(text),
           url: item.link!,
@@ -59,12 +67,18 @@ function extractRooms(text: string): number | undefined {
 }
 
 function extractSurface(text: string): number | undefined {
-  const match = text.match(/(\d+(?:[.,]\d+)?)\s?m(?:²|2)\b/i);
+  // Pas de `\b` après "²": ce n'est pas un caractère "mot" donc `\b` ne
+  // matche jamais entre "²" et l'espace qui suit (deux non-mots).
+  const match = text.match(/(\d+(?:[.,]\d+)?)\s?m(?:²|2)(?!\w)/i);
   return match ? Number(match[1].replace(",", ".")) : undefined;
 }
 
-function extractCity(text: string): string | undefined {
-  // Best-effort: cherche "à <Ville>" ou "- <Ville>" en fin de titre.
-  const match = text.match(/(?:à|a)\s+([A-ZÀ-Ý][\wÀ-ÿ\-\s]{2,30})/);
+function extractCity(title: string): string | undefined {
+  // Best-effort, sur le titre seul: cherche "à <Ville>". Un mot suivant est
+  // inclus seulement s'il commence aussi par une majuscule/chiffre (ex:
+  // "Paris 15e"), pour éviter d'avaler le reste de la phrase.
+  const match = title.match(
+    /(?:à|a)\s+([A-ZÀ-Ý][\wÀ-ÿ-]*(?:[\s-](?:[A-ZÀ-Ý][\wÀ-ÿ-]*|\d[\wÀ-ÿ-]*))*)/
+  );
   return match ? match[1].trim() : undefined;
 }

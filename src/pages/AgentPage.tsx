@@ -91,8 +91,14 @@ export default function AgentPage() {
   }) => {
     if (!user) return;
 
+    // Firestore rejette les champs à `undefined` (minPrice/minRooms/...
+    // quand le champ optionnel est laissé vide dans le formulaire).
+    const cleaned = Object.fromEntries(
+      Object.entries(newCriteria).filter(([, value]) => value !== undefined)
+    );
+
     await addDoc(collection(db, "users", user.uid, "apartmentCriteria"), {
-      ...newCriteria,
+      ...cleaned,
       active: true,
       createdAt: serverTimestamp(),
     });

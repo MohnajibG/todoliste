@@ -7,7 +7,8 @@
   "scripts": {
     "start": "tsx src/index.ts",
     "build": "tsc -b",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "tsx test/matcher.test.ts && tsx test/rss.test.ts"
   },
   "dependencies": {
     "cheerio": "^1.0.0",

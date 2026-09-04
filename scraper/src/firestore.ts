@@ -14,6 +14,11 @@ function loadServiceAccount() {
 
 const app = initializeApp({ credential: cert(loadServiceAccount()) });
 export const db = getFirestore(app);
+// Les annonces ont des champs optionnels (rooms, surface, imageUrl...) qui
+// peuvent être `undefined` selon ce que la source a réussi à extraire.
+// Firestore rejette `undefined` par défaut: on l'ignore plutôt que de
+// filtrer champ par champ à chaque écriture.
+db.settings({ ignoreUndefinedProperties: true });
 
 // Récupère les critères actifs de tous les utilisateurs
 // (users/{uid}/apartmentCriteria/{id}).

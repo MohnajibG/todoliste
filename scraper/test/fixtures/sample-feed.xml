@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Alertes appartements - recherche sauvegardée</title>
+    <link>https://example-portal.test/recherche/123</link>
+    <description>Flux de test simulant une alerte immobilière</description>
+
+    <item>
+      <title>Bel appartement 3 pièces à Paris</title>
+      <link>https://example-portal.test/annonce/1001</link>
+      <pubDate>Fri, 04 Sep 2026 08:00:00 GMT</pubDate>
+      <description>Charmant 3 pièces de 65 m² au calme, 1150 € charges comprises.</description>
+    </item>
+
+    <item>
+      <title>Studio meublé Lyon centre</title>
+      <link>https://example-portal.test/annonce/1002</link>
+      <pubDate>Fri, 04 Sep 2026 07:30:00 GMT</pubDate>
+      <description>Studio de 22 m², 1 pièce, 650 € par mois, proche métro.</description>
+    </item>
+
+    <item>
+      <title>T2 rénové à Paris</title>
+      <link>https://example-portal.test/annonce/1003</link>
+      <pubDate>Fri, 04 Sep 2026 07:00:00 GMT</pubDate>
+      <description>2 pièces de 40 m², 980 €, à Paris, refait à neuf.</description>
+    </item>
+
+    <item>
+      <title>Grand appartement Paris trop cher</title>
+      <link>https://example-portal.test/annonce/1004</link>
+      <pubDate>Fri, 04 Sep 2026 06:00:00 GMT</pubDate>
+      <description>5 pièces de 110 m², 2900 €, quartier prisé de Paris.</description>
+    </item>
+  </channel>
+</rss>
