@@ -16,10 +16,10 @@ correspondante est trouvée.
 - La recherche des annonces elle-même est déléguée à un agent externe
   (dossier [`scraper/`](./scraper/README.md)), qui tourne en dehors du
   front (planifiable via [`.github/workflows/apartment-agent.yml`](./.github/workflows/apartment-agent.yml)).
-  Voir `scraper/README.md` pour la configuration des sources (RSS
-  fonctionnel par défaut, adaptateur HTML pour un site sans protection
-  anti-bot) et les limites volontaires vis-à-vis des sites protégés
-  (leboncoin, SeLoger...).
+  Voir `scraper/README.md` pour la configuration des sources : RSS
+  (fiable, si le portail en propose un), leboncoin et SeLoger (navigateur
+  automatisé Playwright, best-effort face aux protections anti-bot de ces
+  sites — pas de contournement/évasion volontairement).
 
 Currently, two official plugins are available:
 

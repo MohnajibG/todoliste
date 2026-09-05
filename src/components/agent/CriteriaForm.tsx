@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { FiPlus } from "react-icons/fi";
-import type { CriteriaFormProps, PropertyType } from "../../../types";
+import type { CriteriaFormProps, ExternalSource, PropertyType } from "../../../types";
+
+const EXTERNAL_SOURCES: { id: ExternalSource; label: string }[] = [
+  { id: "leboncoin", label: "leboncoin" },
+  { id: "seloger", label: "SeLoger" },
+];
 
 export default function CriteriaForm({ addCriteria }: CriteriaFormProps) {
   const [name, setName] = useState("");
@@ -11,6 +16,13 @@ export default function CriteriaForm({ addCriteria }: CriteriaFormProps) {
   const [minSurface, setMinSurface] = useState("");
   const [propertyType, setPropertyType] = useState<PropertyType>("appartement");
   const [feedUrl, setFeedUrl] = useState("");
+  const [sources, setSources] = useState<ExternalSource[]>([]);
+
+  function toggleSource(id: ExternalSource) {
+    setSources((prev) =>
+      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
+    );
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -25,6 +37,7 @@ export default function CriteriaForm({ addCriteria }: CriteriaFormProps) {
       minSurface: minSurface ? Number(minSurface) : undefined,
       propertyType,
       feedUrl: feedUrl.trim() || undefined,
+      sources: sources.length > 0 ? sources : undefined,
     });
 
     setName("");
@@ -35,6 +48,7 @@ export default function CriteriaForm({ addCriteria }: CriteriaFormProps) {
     setMinSurface("");
     setPropertyType("appartement");
     setFeedUrl("");
+    setSources([]);
   }
 
   const inputClass =
@@ -117,6 +131,27 @@ export default function CriteriaForm({ addCriteria }: CriteriaFormProps) {
         className={`${inputClass} lg:col-span-3`}
         title="URL d'un flux RSS/Atom d'alertes (ex: recherche sauvegardée sur un portail immobilier) que l'agent doit surveiller pour ce critère"
       />
+
+      <div className="lg:col-span-4 flex flex-wrap items-center gap-4 text-sm text-gray-700 dark:text-gray-300">
+        <span className="font-medium">Surveiller aussi sur :</span>
+        {EXTERNAL_SOURCES.map((source) => (
+          <label key={source.id} className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={sources.includes(source.id)}
+              onChange={() => toggleSource(source.id)}
+              className="accent-red-600"
+            />
+            {source.label}
+          </label>
+        ))}
+        <span
+          className="text-xs text-gray-500 dark:text-gray-400 italic"
+          title="Basé sur un navigateur automatisé (Chromium). Ces sites ont des protections anti-bot qui peuvent bloquer la recherche (page de challenge/CAPTCHA au lieu des annonces) — pas de garantie de résultat."
+        >
+          (best-effort, peut être bloqué par le site)
+        </span>
+      </div>
 
       <button
         type="submit"

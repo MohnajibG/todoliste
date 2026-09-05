@@ -15,6 +15,8 @@ export interface ApartmentCriteria {
   minSurface?: number;
   propertyType: PropertyType;
   feedUrl?: string;
+  // Sites à surveiller via navigateur automatisé (ex: ["leboncoin", "seloger"]).
+  sources?: string[];
   active: boolean;
 }
 

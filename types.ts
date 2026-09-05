@@ -58,6 +58,9 @@ export interface CategorySelectorProps {
 // 🔹 Agent de recherche d'appartement
 export type PropertyType = "appartement" | "maison" | "tous";
 
+// Sites surveillés via navigateur automatisé côté scraper (voir scraper/README.md)
+export type ExternalSource = "leboncoin" | "seloger";
+
 // Un critère de recherche enregistré par l'utilisateur
 export interface ApartmentCriteria {
   id: string;
@@ -70,6 +73,8 @@ export interface ApartmentCriteria {
   propertyType: PropertyType;
   // Optionnel: flux RSS d'un site/portail/alerte à surveiller pour ce critère
   feedUrl?: string;
+  // Optionnel: sites à surveiller via l'agent externe (leboncoin/SeLoger)
+  sources?: ExternalSource[];
   active: boolean;
   createdAt: Timestamp;
 }
@@ -109,6 +114,7 @@ export interface CriteriaFormProps {
     minSurface?: number;
     propertyType: PropertyType;
     feedUrl?: string;
+    sources?: ExternalSource[];
   }) => Promise<void>;
 }
 

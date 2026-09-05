@@ -15,6 +15,9 @@ dist-ssr
 # Clé de compte de service Firebase (agent scraper) - ne jamais commiter
 scraper/.env
 
+# Dumps de debug du scraper (HTML/screenshots des pages leboncoin/SeLoger)
+scraper/debug/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

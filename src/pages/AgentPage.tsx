@@ -15,7 +15,7 @@ import CriteriaForm from "../components/agent/CriteriaForm";
 import CriteriaList from "../components/agent/CriteriaList";
 import NotificationsList from "../components/agent/NotificationsList";
 import Header from "../components/Header";
-import type { ApartmentCriteria, ApartmentNotification, PropertyType } from "../../types";
+import type { ApartmentCriteria, ApartmentNotification, ExternalSource, PropertyType } from "../../types";
 
 import { useAuth } from "../utils/useAuth";
 import { db } from "../utils/firebase";
@@ -88,6 +88,7 @@ export default function AgentPage() {
     minSurface?: number;
     propertyType: PropertyType;
     feedUrl?: string;
+    sources?: ExternalSource[];
   }) => {
     if (!user) return;
 

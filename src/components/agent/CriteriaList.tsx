@@ -1,4 +1,4 @@
-import { FiTrash2, FiRss } from "react-icons/fi";
+import { FiTrash2, FiRss, FiGlobe } from "react-icons/fi";
 import type { CriteriaListProps } from "../../../types";
 
 export default function CriteriaList({
@@ -47,11 +47,20 @@ export default function CriteriaList({
                 {c.city} · {c.propertyType} · jusqu'à {c.maxPrice}€
                 {c.minRooms ? ` · ${c.minRooms}+ pièces` : ""}
                 {c.minSurface ? ` · ${c.minSurface}+ m²` : ""}
-                {c.feedUrl ? (
+                {c.feedUrl && (
                   <span className="inline-flex items-center gap-1 ml-2 text-green-600">
-                    <FiRss size={12} /> flux actif
+                    <FiRss size={12} /> flux RSS
                   </span>
-                ) : (
+                )}
+                {c.sources?.map((source) => (
+                  <span
+                    key={source}
+                    className="inline-flex items-center gap-1 ml-2 text-green-600"
+                  >
+                    <FiGlobe size={12} /> {source}
+                  </span>
+                ))}
+                {!c.feedUrl && !c.sources?.length && (
                   <span className="ml-2 italic">
                     (aucune source configurée)
                   </span>

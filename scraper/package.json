@@ -8,11 +8,13 @@
     "start": "tsx src/index.ts",
     "build": "tsc -b",
     "typecheck": "tsc --noEmit",
-    "test": "tsx test/matcher.test.ts && tsx test/rss.test.ts"
+    "test": "tsx test/matcher.test.ts && tsx test/rss.test.ts",
+    "postinstall": "playwright install chromium"
   },
   "dependencies": {
     "cheerio": "^1.0.0",
     "firebase-admin": "^12.7.0",
+    "playwright": "^1.48.0",
     "rss-parser": "^3.13.0"
   },
   "devDependencies": {
