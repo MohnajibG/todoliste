@@ -49,7 +49,7 @@ export default function Header({ dark, setDark }: HeaderProps) {
   return (
     <header className="flex flex-col items-center gap-6 my-4 md:my-10">
       {/* Logo en haut */}
-      <h1 className="text-6xl font-bold">Scout</h1>
+      <h1 className="text-6xl font-bold">Sacha</h1>
       <img
         src="/logotodo.png"
         alt="Logo ToDo"

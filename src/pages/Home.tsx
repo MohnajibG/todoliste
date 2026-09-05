@@ -79,11 +79,11 @@ export default function HomePage() {
         >
           <img
             src="/logotodo.png"
-            alt="Logo Scout"
+            alt="Logo Sacha"
             className="w-20 h-20 mx-auto object-contain"
           />
           <h1 className="text-5xl font-extrabold text-white tracking-tight">
-            Scout
+            Sacha
           </h1>
           <p className="text-lg text-gray-300">
             Organisez vos tâches, ne ratez plus une bonne annonce.
