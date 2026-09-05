@@ -40,7 +40,7 @@ export default function Footer() {
       </div>
 
       <div className="text-center text-gray-500 text-xs mt-4">
-        © {new Date().getFullYear()} TodoListe by Mohamed Najib. All rights
+        © {new Date().getFullYear()} Scout by Mohamed Najib. All rights
         reserved.
       </div>
     </footer>

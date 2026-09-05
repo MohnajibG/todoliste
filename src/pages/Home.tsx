@@ -8,6 +8,7 @@ import { auth, signInWithPopup, googleProvider } from "../utils/firebase";
 // Modern icons with react-icons
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook, FaGithub, FaApple, FaMicrosoft } from "react-icons/fa";
+import { FiCheckSquare, FiBell } from "react-icons/fi";
 import Footer from "../components/Footer";
 
 export default function HomePage() {
@@ -51,21 +52,74 @@ export default function HomePage() {
     tap: { scale: 0.95 },
   };
 
+  const features = [
+    {
+      icon: <FiCheckSquare className="text-red-500" size={26} />,
+      title: "Tâches",
+      description:
+        "Organisez votre quotidien avec des colonnes To Do / Doing / Done, priorités et catégories.",
+    },
+    {
+      icon: <FiBell className="text-red-500" size={26} />,
+      title: "Agent appartement",
+      description:
+        "Créez des alertes selon vos critères (ville, budget, pièces) et recevez une notification dès qu'une annonce correspond.",
+    },
+  ];
+
   return (
     <main className="flex flex-col">
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-black to-red-900 p-6">
+      <div className="min-h-screen flex flex-col items-center justify-center gap-10 bg-gradient-to-br from-gray-900 via-black to-red-900 p-6">
+        {/* Hero */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-center space-y-4 max-w-xl"
+        >
+          <img
+            src="/logotodo.png"
+            alt="Logo Scout"
+            className="w-20 h-20 mx-auto object-contain"
+          />
+          <h1 className="text-5xl font-extrabold text-white tracking-tight">
+            Scout
+          </h1>
+          <p className="text-lg text-gray-300">
+            Organisez vos tâches, ne ratez plus une bonne annonce.
+          </p>
+        </motion.div>
+
+        {/* Fonctionnalités */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+          className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-xl"
+        >
+          {features.map((feature) => (
+            <div
+              key={feature.title}
+              className="flex items-start gap-3 p-4 bg-white/10 border border-white/20 backdrop-blur-lg text-left"
+            >
+              <div className="mt-1">{feature.icon}</div>
+              <div>
+                <h3 className="font-semibold text-white">{feature.title}</h3>
+                <p className="text-sm text-gray-300">{feature.description}</p>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Connexion */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="p-12 bg-white/10 shadow-2xl text-center space-y-8 backdrop-blur-lg border border-white/20 w-full max-w-lg"
+          transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+          className="p-10 bg-white/10 shadow-2xl text-center space-y-6 backdrop-blur-lg border border-white/20 w-full max-w-lg"
         >
-          <h1 className="text-4xl font-extrabold text-white tracking-tight">
-            Welcome to <span className="text-red-500">To-Do</span>
-          </h1>
-
-          <h2 className="text-xl font-semibold text-gray-200 uppercase tracking-wide">
-            Sign in
+          <h2 className="text-lg font-semibold text-gray-200 uppercase tracking-wide">
+            Connexion
           </h2>
 
           <div className="grid grid-cols-3 gap-6 justify-items-center">
