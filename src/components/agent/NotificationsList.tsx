@@ -8,7 +8,7 @@ export default function NotificationsList({
 }: NotificationsListProps) {
   if (notifications.length === 0) {
     return (
-      <p className="text-white/70 text-center py-4">
+      <p className="text-center py-8 text-gray-700 dark:text-gray-400">
         Aucune annonce trouvée pour l'instant. L'agent vous préviendra ici dès
         qu'une annonce correspond à l'un de vos critères.
       </p>

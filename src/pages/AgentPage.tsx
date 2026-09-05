@@ -136,7 +136,7 @@ export default function AgentPage() {
         <Header dark={dark} setDark={setDark} />
 
         <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm p-6 shadow-lg space-y-4">
-          <h2 className="text-xl font-bold text-red-700 dark:text-red-400">
+          <h2 className="font-semibold text-lg text-red-600 dark:text-red-400">
             Nouvelle alerte appartement
           </h2>
           <CriteriaForm addCriteria={addCriteria} />
@@ -144,7 +144,7 @@ export default function AgentPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm p-6 shadow-lg space-y-4">
-            <h2 className="text-xl font-bold text-red-700 dark:text-red-400">
+            <h2 className="font-semibold text-lg text-red-600 dark:text-red-400">
               Mes critères
             </h2>
             <CriteriaList
@@ -155,7 +155,7 @@ export default function AgentPage() {
           </div>
 
           <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm p-6 shadow-lg space-y-4">
-            <h2 className="text-xl font-bold text-red-700 dark:text-red-400">
+            <h2 className="font-semibold text-lg text-red-600 dark:text-red-400">
               Notifications
               {unreadCount > 0 && (
                 <span className="ml-2 inline-flex items-center justify-center w-6 h-6 text-sm bg-red-600 text-white rounded-full">

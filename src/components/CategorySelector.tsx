@@ -101,12 +101,12 @@ export default function CategorySelector({
           value={categoryName}
           onChange={(e) => setCategoryName(e.target.value)}
           placeholder="Category name"
-          className="flex-1 px-3 py-2 pr-10 rounded border focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white w-full"
+          className="flex-1 px-3 py-2 pr-10 rounded border focus:ring-2 focus:ring-red-500 dark:bg-gray-800 dark:text-white w-full"
         />
         <button
           type="button"
           onClick={saveCategory}
-          className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center text-green-600 text-lg font-bold rounded-full hover:text-green-400"
+          className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center text-red-600 text-lg font-bold rounded-full hover:text-red-400"
         >
           +
         </button>

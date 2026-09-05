@@ -123,7 +123,7 @@ export default function CriteriaForm({ addCriteria }: CriteriaFormProps) {
         className="flex items-center justify-center gap-2 p-3 bg-red-600 text-white rounded-full shadow hover:bg-red-700 transition"
       >
         <FiPlus size={20} />
-        <span className="sm:hidden lg:inline">Créer l'alerte</span>
+        <span>Créer l'alerte</span>
       </button>
     </form>
   );

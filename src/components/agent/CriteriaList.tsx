@@ -8,7 +8,7 @@ export default function CriteriaList({
 }: CriteriaListProps) {
   if (criteria.length === 0) {
     return (
-      <p className="text-white/70 text-center py-4">
+      <p className="text-center py-8 text-gray-700 dark:text-gray-400">
         Aucun critère de recherche pour le moment. Créez-en un ci-dessus.
       </p>
     );
