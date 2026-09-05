@@ -32,7 +32,11 @@ export default function Header({ dark, setDark }: HeaderProps) {
     });
 
     return () => unsubscribe();
-  }, [user]);
+    // On dépend de user?.uid (primitif stable) plutôt que de l'objet
+    // `user` entier, dont la référence change à chaque rendu de
+    // AuthProvider et provoquerait une resouscription en boucle.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.uid]);
 
   const avatarUrl = user?.photoURL
     ? user.photoURL

@@ -57,7 +57,10 @@ export default function AgentPage() {
     });
 
     return () => unsubscribe();
-  }, [user]);
+    // user?.uid (primitif stable) plutôt que l'objet `user`, dont la
+    // référence change à chaque rendu de AuthProvider — voir AuthProvider.tsx.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.uid]);
 
   // 🔹 Notifications (annonces trouvées) de l'utilisateur
   useEffect(() => {
@@ -77,7 +80,8 @@ export default function AgentPage() {
     });
 
     return () => unsubscribe();
-  }, [user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- voir plus haut
+  }, [user?.uid]);
 
   const addCriteria = async (newCriteria: {
     name: string;

@@ -64,7 +64,10 @@ export default function TodoListPage() {
     });
 
     return () => unsubscribe();
-  }, [user]);
+    // user?.uid (primitif stable) plutôt que l'objet `user`, dont la
+    // référence change à chaque rendu de AuthProvider — voir AuthProvider.tsx.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.uid]);
 
   // 🔹 Supprimer une todo
   const removeTodo = async (id: string) => {
