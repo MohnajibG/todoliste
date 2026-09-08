@@ -12,7 +12,7 @@ function loadServiceAccount() {
   return JSON.parse(raw);
 }
 
-const app = initializeApp({ credential: cert(loadServiceAccount()) });
+export const app = initializeApp({ credential: cert(loadServiceAccount()) });
 export const db = getFirestore(app);
 // Les annonces ont des champs optionnels (rooms, surface, imageUrl...) qui
 // peuvent être `undefined` selon ce que la source a réussi à extraire.

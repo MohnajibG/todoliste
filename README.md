@@ -6,13 +6,20 @@ This template provides a minimal setup to get React working in Vite with HMR and
 
 En plus de la todo-list, l'app propose une page **Agent** (`/agent`) pour
 créer des alertes de recherche d'appartement (ville, budget, pièces,
-surface) et recevoir une notification in-app dès qu'une annonce
-correspondante est trouvée.
+surface) et recevoir une notification dès qu'une annonce correspondante
+est trouvée.
 
 - Les critères et les notifications sont stockés dans Firestore
   (`users/{uid}/apartmentCriteria` et `users/{uid}/apartmentNotifications`).
 - Un badge sur l'icône 🔔 du header indique le nombre de notifications non
   lues, visible depuis toute l'app.
+- **Notifications push** : le bouton sur `/agent` active les notifications
+  navigateur (Web Push via Firebase Cloud Messaging) — elles arrivent même
+  onglet/app fermé. Le token de l'appareil est stocké dans
+  `users/{uid}/fcmTokens`, et l'agent (`scraper/src/push.ts`) y envoie un
+  push à chaque nouvelle annonce. Nécessite une clé VAPID dans `.env`
+  (`VITE_FIREBASE_VAPID_KEY`, voir commentaire dans `.env`) ; sans elle,
+  seule la notification in-app fonctionne.
 - La recherche des annonces elle-même est déléguée à un agent externe
   (dossier [`scraper/`](./scraper/README.md)), qui tourne en dehors du
   front (planifiable via [`.github/workflows/apartment-agent.yml`](./.github/workflows/apartment-agent.yml)).

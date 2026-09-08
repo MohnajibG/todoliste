@@ -1,4 +1,5 @@
 import { getActiveCriteria, writeNotificationIfNew } from "./firestore.js";
+import { sendPushNotifications } from "./push.js";
 import { matchesCriteria } from "./matcher.js";
 import { rssSource } from "./sources/rss.js";
 import { leboncoinSource } from "./sources/leboncoin.js";
@@ -40,7 +41,16 @@ async function run() {
 
         for (const listing of matches) {
           const created = await writeNotificationIfNew(c.userId, c, listing);
-          if (created) newNotifications += 1;
+          if (created) {
+            newNotifications += 1;
+            await sendPushNotifications(c.userId, c.name, listing).catch(
+              (err) =>
+                console.error(
+                  `[agent] notification push échouée pour "${c.name}":`,
+                  err
+                )
+            );
+          }
         }
       } catch (err) {
         console.error(`[agent] échec pour le critère "${c.name}" (source ${source.name}):`, err);

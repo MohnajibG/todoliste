@@ -21,8 +21,12 @@ function buildSearchUrl(criteria: ApartmentCriteria): string {
   params.set("projects", "1"); // 1 = location — à vérifier
   params.set("types", criteria.propertyType === "maison" ? "2" : "1");
   params.set("places", JSON.stringify([{ ci: criteria.city }]));
-  params.set("price", `${criteria.minPrice ?? "NaN"}/${criteria.maxPrice}`);
-  if (criteria.minRooms) params.set("rooms", `${criteria.minRooms}-NaN`);
+  // Borne absente = chaîne vide (convention "sans limite" des filtres de
+  // recherche par plage), jamais la chaîne littérale "NaN" : SeLoger
+  // rejette la requête (ERR_HTTP_RESPONSE_CODE_FAILURE) si elle apparaît
+  // dans l'URL.
+  params.set("price", `${criteria.minPrice ?? ""}/${criteria.maxPrice}`);
+  if (criteria.minRooms) params.set("rooms", `${criteria.minRooms}-`);
   return `https://www.seloger.com/list.htm?${params.toString()}`;
 }
 

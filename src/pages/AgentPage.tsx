@@ -14,11 +14,13 @@ import {
 import CriteriaForm from "../components/agent/CriteriaForm";
 import CriteriaList from "../components/agent/CriteriaList";
 import NotificationsList from "../components/agent/NotificationsList";
+import PushNotificationToggle from "../components/agent/PushNotificationToggle";
 import Header from "../components/Header";
 import type { ApartmentCriteria, ApartmentNotification, ExternalSource, PropertyType } from "../../types";
 
 import { useAuth } from "../utils/useAuth";
 import { db } from "../utils/firebase";
+import { listenForegroundPush } from "../utils/messaging";
 
 export default function AgentPage() {
   const { user } = useAuth();
@@ -83,6 +85,23 @@ export default function AgentPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- voir plus haut
   }, [user?.uid]);
 
+  // 🔹 Notification système quand une nouvelle annonce arrive pendant que
+  // l'app est ouverte au premier plan (FCM ne l'affiche pas tout seul
+  // dans ce cas, contrairement à quand l'onglet est fermé/en arrière-plan).
+  useEffect(() => {
+    let unsubscribe: (() => void) | undefined;
+
+    listenForegroundPush((title, body) => {
+      if (Notification.permission === "granted") {
+        new Notification(title, { body, icon: "/logotodo.png" });
+      }
+    }).then((unsub) => {
+      unsubscribe = unsub;
+    });
+
+    return () => unsubscribe?.();
+  }, []);
+
   const addCriteria = async (newCriteria: {
     name: string;
     city: string;
@@ -141,39 +160,40 @@ export default function AgentPage() {
         <Header dark={dark} setDark={setDark} />
 
         <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm p-6 shadow-lg space-y-4">
-          <h2 className="font-semibold text-lg text-red-600 dark:text-red-400">
-            Nouvelle alerte appartement
-          </h2>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="font-semibold text-lg text-red-600 dark:text-red-400">
+              Nouvelle alerte appartement
+            </h2>
+            {user && <PushNotificationToggle userId={user.uid} />}
+          </div>
           <CriteriaForm addCriteria={addCriteria} />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm p-6 shadow-lg space-y-4">
-            <h2 className="font-semibold text-lg text-red-600 dark:text-red-400">
-              Mes critères
-            </h2>
-            <CriteriaList
-              criteria={criteria}
-              toggleActive={toggleActive}
-              removeCriteria={removeCriteria}
-            />
-          </div>
+        <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm p-6 shadow-lg space-y-4">
+          <h2 className="font-semibold text-lg text-red-600 dark:text-red-400">
+            Mes critères
+          </h2>
+          <CriteriaList
+            criteria={criteria}
+            toggleActive={toggleActive}
+            removeCriteria={removeCriteria}
+          />
+        </div>
 
-          <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm p-6 shadow-lg space-y-4">
-            <h2 className="font-semibold text-lg text-red-600 dark:text-red-400">
-              Notifications
-              {unreadCount > 0 && (
-                <span className="ml-2 inline-flex items-center justify-center w-6 h-6 text-sm bg-red-600 text-white rounded-full">
-                  {unreadCount}
-                </span>
-              )}
-            </h2>
-            <NotificationsList
-              notifications={notifications}
-              markAsRead={markAsRead}
-              removeNotification={removeNotification}
-            />
-          </div>
+        <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm p-6 shadow-lg space-y-4">
+          <h2 className="font-semibold text-lg text-red-600 dark:text-red-400">
+            Résultats de recherche
+            {unreadCount > 0 && (
+              <span className="ml-2 inline-flex items-center justify-center w-6 h-6 text-sm bg-red-600 text-white rounded-full">
+                {unreadCount}
+              </span>
+            )}
+          </h2>
+          <NotificationsList
+            notifications={notifications}
+            markAsRead={markAsRead}
+            removeNotification={removeNotification}
+          />
         </div>
       </div>
     </div>

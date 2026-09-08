@@ -32,7 +32,12 @@ export async function fetchRenderedHtml(
   url: string,
   { waitForSelector, timeoutMs = 30000, debugName }: FetchRenderedHtmlOptions = {}
 ): Promise<string> {
-  const browser = await chromium.launch({ headless: true });
+  // channel "chrome" pilote le Google Chrome déjà installé sur la machine
+  // plutôt que le Chromium que `playwright install` téléchargerait: évite
+  // une dépendance à une build Chromium par OS (ex: non fournie pour les
+  // versions de macOS trop anciennes) — pré-requis: Chrome installé sur la
+  // machine qui exécute l'agent (le cas des runners GitHub Actions ubuntu).
+  const browser = await chromium.launch({ headless: true, channel: "chrome" });
 
   try {
     const page = await browser.newPage({

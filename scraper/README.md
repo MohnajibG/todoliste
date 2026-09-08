@@ -27,10 +27,17 @@ Un même critère peut combiner plusieurs sources à la fois.
 
 ### leboncoin / SeLoger : ce qu'il faut savoir avant d'utiliser ces sources
 
-Ces deux adaptateurs utilisent un vrai navigateur headless (Chromium via
-Playwright, `src/sources/browser.ts`) plutôt qu'une simple requête HTTP:
-c'est nécessaire car ces sites affichent leurs résultats via
+Ces deux adaptateurs utilisent un vrai navigateur headless (Google Chrome
+via Playwright, `src/sources/browser.ts`) plutôt qu'une simple requête
+HTTP: c'est nécessaire car ces sites affichent leurs résultats via
 React/Next.js après exécution du JavaScript.
+
+**Pré-requis : Google Chrome doit être installé sur la machine qui
+exécute l'agent.** Playwright pilote votre Chrome existant (`channel:
+"chrome"`) plutôt que de télécharger son propre Chromium — ça évite une
+dépendance à une build Chromium par OS (indisponible pour certaines
+versions de macOS un peu anciennes, par exemple). Les runners GitHub
+Actions `ubuntu-latest` ont Chrome préinstallé, rien à faire pour eux.
 
 **Ce que ce projet fait** : ouvrir la page de recherche avec un navigateur
 standard (User-Agent réaliste, pas d'automatisation cachée), attendre le
