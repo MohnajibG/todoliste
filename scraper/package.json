@@ -5,20 +5,21 @@
   "type": "module",
   "description": "Agent externe: surveille des flux d'annonces immobilières et pousse des notifications dans Firestore pour l'app todoliste.",
   "scripts": {
-    "start": "tsx --env-file-if-exists=.env src/index.ts",
+    "start": "tsx src/index.ts",
     "build": "tsc -b",
     "typecheck": "tsc --noEmit",
     "test": "tsx test/matcher.test.ts && tsx test/rss.test.ts"
   },
   "dependencies": {
     "cheerio": "^1.0.0",
+    "dotenv": "^16.6.1",
     "firebase-admin": "^12.7.0",
     "playwright": "^1.48.0",
     "rss-parser": "^3.13.0"
   },
   "devDependencies": {
+    "@types/node": "^22.10.2",
     "tsx": "^4.19.2",
-    "typescript": "~5.8.3",
-    "@types/node": "^22.10.2"
+    "typescript": "~5.8.3"
   }
 }

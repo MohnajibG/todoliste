@@ -1,3 +1,9 @@
+// Doit rester le tout premier import : charge scraper/.env dans
+// process.env avant que ./firestore.js (import suivant) ne le lise à son
+// chargement. Fonctionne quelle que soit la version de Node — contrairement
+// au flag `--env-file`, indisponible sur le Node 20 des runners GitHub
+// Actions (ajouté seulement en Node 22.9).
+import "dotenv/config";
 import { getActiveCriteria, writeNotificationIfNew } from "./firestore.js";
 import { sendPushNotifications } from "./push.js";
 import { matchesCriteria } from "./matcher.js";
